@@ -28,6 +28,11 @@ namespace multiregister
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddTransient<ICurrencyInvoicingService<Euro>, CurrencyInvoicingService<Euro>>();
+            services.AddTransient<ICurrencyInvoicingService<Euro>, LowTaxEuroService>();
+            services.AddTransient<ICurrencyInvoicingService<Dollar>, CurrencyInvoicingService<Dollar>>();
+            services.AddTransient<ICurrencyInvoicingService<Pound>, CurrencyInvoicingService<Pound>>();
+
             services.RegisterAllTypes<IInvoicingService>(new[] { typeof(Startup).Assembly });
         }
 

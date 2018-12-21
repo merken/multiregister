@@ -13,10 +13,12 @@ namespace multiregister.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly IEnumerable<IInvoicingService> invoicingServices;
+        private readonly IEnumerable<ICurrencyInvoicingService<Euro>> euroServices;
 
-        public InvoicesController(IEnumerable<IInvoicingService> invoicingServices)
+        public InvoicesController(IEnumerable<IInvoicingService> invoicingServices, IEnumerable<ICurrencyInvoicingService<Euro>> euroServices)
         {
             this.invoicingServices = invoicingServices;
+            this.euroServices = euroServices;
         }
 
         [HttpGet]
@@ -33,7 +35,12 @@ namespace multiregister.Controllers
             {
                 builder.AppendLine($"{service.CreateInvoice(hoursPerformed)}");
             }
-            
+
+            foreach (var service in euroServices)
+            {
+                builder.AppendLine($"{service.CreateInvoice(hoursPerformed)}");
+            }
+
             builder.AppendLine($"---------------------");
 
             return builder.ToString();
